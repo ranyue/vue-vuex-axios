@@ -1,0 +1,68 @@
+  Vue 笔记
+  1、Vuex
+  组件
+  {{count}} 数据通过 computed  this.$store.state 获取
+    通过store计算绑定的数据，显示页面数据
+  computed : count(){
+    return this.$store.state.count
+  ｝
+  action   store.commit('事件名')， 可以异步操作
+  组件不再去具体处理事件，事件的处理方式为store.commit('事件名')，发射事件，Store 中mutations 会有相应事件的监听和响应。
+
+
+  通过绑定事件，去给store 提交对应的改动动作，促使store 执行相关操作
+  v-bind:inc
+  methods: {
+    inc (){
+    store.commit('inc')
+    }
+  }
+Store
+  store 定义初始state 数据和事件的处理方法。
+  const store = new Vuex.store({
+    state : {
+    count :0,
+  },
+  store 对每个特定的动作，有着对应的关于store 中数据的处理方法。
+  getters : 常用数据获取或函数调用
+  vue 组件中 常规数据获取
+  computed: {
+    doneTodosCount () {
+      return this.$store.state.todos.filter(todo => todo.done).length
+    }
+  }
+  vuex store 设置快捷方式
+  getters: {
+     doneTodos: state => {
+       return state.todos.filter(todo => todo.done)
+     }
+  }
+  store.getters.doneTodos 可以获得对应的数据
+
+  actions  : {
+      事件名 function(){} 可以异步操作
+      为store.dispatch 提交的各种事件的处理函数
+  }
+  mutations : {
+     事件名 function(){} 不可以异步操作
+     为store.commit() 提交的各种事件的处理函数
+  }
+  mutations : {
+    inc : state =>state.count ++
+    }
+  })
+
+  store.commit(事件名，params)  触发 mutations 中的同步函数。
+
+  store.dispatch(事件名，params) 触发 actions 中的函数，可以异步。
+
+  事件名，params 可以为 (事件名，{id :1}) ({type: 事件名,id:1}) 形式
+
+  组件中 分发 action 
+    import {mapActions} from 'vuex';
+    methods : {
+      ...mapActions([
+        事件名
+      ])
+    }
+    或 this.$store.dispatch(事件名)
