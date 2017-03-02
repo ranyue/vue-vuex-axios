@@ -12,25 +12,27 @@
     </div>
 </template>
 <script>
+    import {mapState} from 'vuex';
     export default {
         name : 'goodssubtotal',
-       
-        data(){
-            return{
-                number : 0,
-
-                amount : 0,
-            }
-        },
+        computed : mapState{
+            'goodsdetail'
+        }
         
         methods : {
             // 加入购物车
+
+//             请求参数  
+// {"buyerId":"1:2:3","goodsId":66,"goodsSkuId":65,"goodsNum":2}
+// 返回结果
+// 失败 ： {"code":"A0001","msg":"request parameters is invalid !"}
+// 成功 ： {"code":"A0000","msg":null}
+
             addtoshopingcart : this.$store.dispatch('addtoshopingcart',{
-               data : {
-                   id : '',
-                   num :  '',
-                   price : ''
-               }
+               "buyerId":"1:2:3",
+               "goodsId":66,
+               "goodsSkuId":65,
+               "goodsNum":2
             })
         }
     }

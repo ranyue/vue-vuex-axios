@@ -2,20 +2,17 @@
 <template>
     <div>
         <div>
-            <img src="" alt="">主图
+            <img src={{show_data.goodsImage}} alt="主图">
         </div>
-        <div>
-            <img src="" alt="">附图
-            <img src="" alt="">
-            <img src="" alt="">
-            <img src="" alt="">
+        <div v-for="src in show_data.imgList">
+            <img src={{src}} alt="附图">
         </div>
         <div class="goodsshow-data">
             <div>
-                <i>编号<i><i>fx0010</i>
+                <i>编号<i><i>{{show_data.lcCode}}</i>
             </div>
             <div>
-                <i>LC编号<i><i>fx0010</i>
+                <i>LC编号<i><i>{{show_data.code}}</i>
             </div>
 
         </div>
@@ -24,12 +21,12 @@
 <script>
     export default {
         name : 'goodsshow',
-        props : [],
-        data(){
-            return{
-
+        props : {
+            show_data :{
+                type:Object,
+                default : {},
+                required : true,
             }
-        }
-
+        },
     }
 </script>
