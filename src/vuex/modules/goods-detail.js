@@ -6,7 +6,7 @@ const state = {
     goods_detail : {},
     goods_productsku : '',
     goods_productspu: '',
-    checkedmodel : [],
+    checked_model : [],
     shopingcar : [],
     goods_subtotal : '',
     get_goods_data_failed : fales,
@@ -58,7 +58,13 @@ const mutations = {
     },
     // 选择或取消对应的商品规格
     [types.CLICK_MODEL_BUTTON](state,{data}){
-        
+        for(let i =0;i<state.checked_model.length;i++){
+            if(data == checked_model[i]){
+                state.checked_model.splice(i,1);
+            }else{
+                state.checked_model.push(data);
+            }
+        }
     },
     //获取商品信息成功
     [types.GET_GOODS_DATA_SUCCESS](state,{data}){

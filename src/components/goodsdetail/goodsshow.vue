@@ -2,10 +2,11 @@
 <template>
     <div>
         <div>
-            <img src={{show_data.goodsImage}} alt="主图">
+        
+            <img v-bind:src="show_data.goodsImage" alt="主图">
         </div>
-        <div v-for="src in show_data.imgList">
-            <img src={{src}} alt="附图">
+        <div v-for="imgsrc in show_data.imgList">
+            <img v-bind:src="imgsrc" alt="附图">
         </div>
         <div class="goodsshow-data">
             <div>
