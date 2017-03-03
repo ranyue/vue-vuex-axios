@@ -11,7 +11,7 @@
                 <goodsdata v-bind:data="goods_data"></goodsdata>
                 <goodsmodel v-bind:model="goods_model"></goodsmodel>
                 
-                <goodsselected v-bind:selected="goods_selected"></goodsselected>
+                <goodsselected v-bind:selectedList="goods_selected"></goodsselected>
                 <goodssubtotal v-bind:subtotal="goods_subtotal"></goodssubtotal>
             </div>
         </div>
@@ -40,29 +40,30 @@
     import goodspic from './goodspic.vue';
 
     import axios from  'axios';
-    import api from '../configs/api';
+    import api from '../../api/api.js';
+    import {mapState} from 'vuex';
     const url = api.productDetail;
     export default {
-        data(){
-            return{
-                   // 标题 一 二 三 级类目 和商品名称
-                detail_title_data : [],
-                // 商品图片展示及图片下方数据
-                goods_show_data : {},
-                 // 右侧 商品数据
-                goods_data: {},
+        // data(){
+        //     return{
+        //            // 标题 一 二 三 级类目 和商品名称
+        //         detail_title_data : [],
+        //         // 商品图片展示及图片下方数据
+        //         goods_show_data : {},
+        //          // 右侧 商品数据
+        //         goods_data: {},
                 
-                goods_model :[],
-                 //已选清单及相关数量 以及价格
-                goods_selected : [],
-                // 商品价格统计
-                goods_subtotal : '',
-                // 下半部分商品数据展示
-                goods_second_info : {},
-                // 页面底部商品大图片展示及空余部分使用公司宣传图片
-                goods_pic : [],
-            }
-        }
+        //         goods_model :[],
+        //          //已选清单及相关数量 以及价格
+        //         goods_selected : [],
+        //         // 商品价格统计
+        //         goods_subtotal : '',
+        //         // 下半部分商品数据展示
+        //         goods_second_info : {},
+        //         // 页面底部商品大图片展示及空余部分使用公司宣传图片
+        //         goods_pic : [],
+        //     }
+        // },
         components : [
             detailtitle,
             goodsshow,
@@ -73,7 +74,7 @@
             goodssecondinfo,
             goodspic
         ],
-        computed : mapState{
+        computed : mapState({
            detail_title_data (state){
                let title =[];
                for(let i=0;i<4;i++){
@@ -112,16 +113,25 @@
                let model = [];
                const length = state.productsku.length;
                for(let i =0;i<length;i++){
-                    model.push(state.productsku[i].specification)
+                    mmodel[i]={
+                       specification : state.productsku[i].specification,// 型号
+                       price : state.productsku[i].salesPrice&&state.productsku[i].agreePrice, // 价格
+                       is_agreePrice : state.productsku[i].agreePrice === '', // 是否为协议价
+                       productId : state.productsku[i].productId,// 商品id
+                       sku : state.productsku[i].sku // 规格sku 编码 
+
+
+
+                    }
                }
                return model;//商品类型
            },
            goods_selected(state){
-               return  state.checkedmodel;// 已选择的商品类型
+               return  state.selectedmodel;// 已选择的商品类型
            },
            goods_subtotal(state){
                 return state.goods_subtotal;//总价
-           }
+           },
            goods_second_info(state){
                 let goodsSecondInfo = {};
                 goodsSecondInfo.unit = state.productspu.unit;//单位
@@ -136,16 +146,44 @@
            goods_pic(state){
                 return state.productspu.imgList;//小图
            }
-        },
+        }),
         //“productid”:”12345”, “start”:”0”, “num”:”10”，“tenantId”：“abcd”
         methods : {
-            getgooosdata(){
-                this.$store.dispatch('goodsdetail',{
-                    productid: "224",
+            getgoodsdata(){
+                // this.$store.dispatch('goods_detail',{
+                //     productid: "224",
+                //     start: "0",
+                //     num: "10",
+                //     tenantId: "1"
+                // });
+                 axios.post(api.productDetail,{
+                      productid: "224",
                     start: "0",
                     num: "10",
                     tenantId: "1"
+                 })
+                .then(function(response){
+                        if(response){
+                            console.log(response);
+                        }
+                        
+                    }
+                    // (response)=>{
+                    // console.log(response,11);
+                    // if(response.code == 'A0000'){
+                    //     commit(types.GET_GOODS_DATA_SUCCESS,{ response})
+                    // }else{
+                    //     commit(types.GET_GOODS_DATA_FAILED,{response})
+                    // }
+                )
+            .catch(function (error) {
+                //    console.log(error);
                 });
+
+
+
+
+
             }
         },
         mouted : function(){

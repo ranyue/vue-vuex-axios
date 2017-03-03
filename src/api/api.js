@@ -6,7 +6,7 @@
 
 // const apiPath = 'https://etrade.linkedcare.cn';
 
-测试环境
+// 测试环境
 const apiPath = 'https://etradetest.linkedcare.cn';
 
 

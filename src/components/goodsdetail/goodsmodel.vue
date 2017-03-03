@@ -8,14 +8,18 @@
             <el-checkbox v-for="item in models" :label="item">{{item}}</el-checkbox>
         </el-checkbox-group>-->
        <ul>
-         <li v-for="item in model" @clik="handlecheckedModelsChange(item)" class="checked: is-checked">{{item}}
-           
-         </li>
+         <model-button 
+         v-for="(item,index) in model" 
+         v-on:SelectedModelsChange="handleSelectedModelsChange" 
+         v-bind:data="item"
+         v-bind:key ="index"
+         ></model-button>
        </ul>
-    <div>
+    </div>
 </template>
 <script>
 // 数据为请求过来的型号
+import modelButton from './modelbutton.vue';
   export default {
     props:{
       model :{
@@ -23,29 +27,30 @@
         required : true,
         default : [],
       }
-    }
-    data() {
-      return {
-        checkedModels: [],
-        models: modelOptions,
-        isIndeterminate: true
-      };
     },
     methods: {
       //  此处应该判断是否在已选类型中已有了
-      handlecheckedModelsChange(value) {
-        for(let i in this.$state.checked_model){
-          if(value == this.$state.checked_model[i]){
-             this.$store.commit('delete_checked_model',{
-                value
-              });
-              this.event.target.
+      handlecheckedModelsChange(data) {
+        for(let i in this.$state.selected_model){
+          if(data.productId == this.$state.selected_model[i].productId){
+            //已在 选中列表，删除！！
+             this.$store.commit('DELETE_SELECTED_MODEL',i);
+          }else{
+            //不在，添加到列表 
+              this.$store.commit('ADD_SELECTED_MODEL',
+                model[data.key]
+              );
           }
         }
-        this.$store.commit('clickModel',{
-          value
-        });
       }
+    },
+    components : [
+      modelButton
+    ],
+    mounted : function(){
+      this.$store.commit('INITIAL_MODEL',{
+        model :this.model
+      })
     }
   };
 </script>

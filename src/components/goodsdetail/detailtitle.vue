@@ -14,7 +14,7 @@
     // 具体页面数据应为路由跳转过来的参数
     export default {
         name : 'detailtitle',
-        props：{
+        props:{
             category : {
                 type:Array,
                 default : [],
