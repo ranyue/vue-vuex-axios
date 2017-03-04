@@ -5,12 +5,14 @@ import App from './App'
 import router from './router'
 import store  from './vuex/store'
 import { currency } from './currency'
-import { Button } from 'element-ui'
+import { Button,Breadcrumb} from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 
 Vue.config.productionTip = false
 Vue.filter('currency', currency)
-Vue.use(Button)
+Vue.use(Button);
+
+Vue.use(Breadcrumb);
 
 /* eslint-disable no-new */
 new Vue({

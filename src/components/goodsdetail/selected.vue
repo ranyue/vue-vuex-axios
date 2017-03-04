@@ -29,15 +29,17 @@ import {mapState} from 'vuex';
         number : this.num
       } 
     },
-    computed : mapState({
-      num(state){
-        for(let i in state.selected_model ){
-          if(this.list.productId == state.selected_model[i].productId){
-            return  state.selected_model[i].num
+    computed : {
+      ...mapState({
+          num(state){
+            for(let i in state.selected_model ){
+              if(this.list.productId == state.selected_model[i].productId){
+                return  state.selected_model[i].num
+              }
+            }
           }
-        }
-      }
-    }),
+      })
+    },
     methods : {
       // 删除对应商品
       handleClick :  function (){

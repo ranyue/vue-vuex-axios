@@ -4,39 +4,54 @@
 
 <template>
     <div class="goodsdata">
-        <h3>{{data.name}}</h3>
-        <i>{{data.subtitle}}</i>
+        <h3>{{goodsData.name}}</h3>
+        <i>{{goodsData.subtitle}}</i>
         <div class="info_container">
             <div class="goods_info" >
-                <span>市场价</span><span>{{data.price}}￥</span>
+                <span>市场价</span><span>{{goodsData.price}}￥</span>
             </div>
-            <div class="goods_info" v-if="data.salesPrice">
-                <span>促销价</span><span>{{data.salesPrice}}￥</span>
+            <div class="goods_info" v-if="goodsData.salesPrice">
+                <span>促销价</span><span>{{goodsData.salesPrice}}￥</span>
             </div>
-            <div class="goods_info" v-if="data.brandName">
-                <span>品牌</span><span>{{data.brandName}}</span>
+            <div class="goods_info" v-if="goodsData.brandName">
+                <span>品牌</span><span>{{goodsData.brandName}}</span>
             </div>
-            <div class="goods_info" v-if="data.register">
-                <span>注册证号</span><span>{{data.register}}</span>
+            <div class="goods_info" v-if="goodsData.register">
+                <span>注册证号</span><span>{{goodsData.register}}</span>
             </div>
-            <div class="goods_info" v-if="data.saledNumber">
-                <span>销售量</span><span>{{data.saledNumber}}</span>
+            <div class="goods_info" v-if="goodsData.saledNumber">
+                <span>销售量</span><span>{{goodsData.saledNumber}}</span>
             </div>
-            <div class="goods_info" v-if="data.storeName">
-                <span>供应商</span><span>{{data.storeName}}</span>
+            <div class="goods_info" v-if="goodsData.storeName">
+                <span>供应商</span><span>{{goodsData.storeName}}</span>
             </div>
         </div>
     </div>
 </template>
 <script>
+    import {mapState} from 'vuex';
     export default {
-        name: 'goodsdata',
-        props: {
-            data :{
-                type:Object,
-                default : {},
-                required : true,
+        data(){
+            return {
+                goodsData  : {}
             }
+        },
+        computed : {
+            ...mapState({
+                goodsData(state){
+                    let goodsData = {};
+                    goodsData.name = state.productspu.name;//商品名称
+                    goodsData.subtitle = state.productspu.subtitle;// 次标题
+                    goodsData.price = state.productspu.salesPrice*1.1;// 市场价
+                    //协议价或者折扣价
+                    goodsData.salesPrice = state.productspu.agreePrice? state.productspu.agreePrice: state.productspu.salesPrice ;
+                    goodsData.brandName =   state.productspu.brandName; //品牌
+                        goodsData.register = state.productspu.medicalRegistNum;     //注册证号
+                        goodsData.saledNumber = state.productspu.saledNumber;//销售量
+                        goodsData.storeName =state.productspu.storeName;//供应商
+                        return goodsData;
+                },
+            })
         }
     }
 </script>

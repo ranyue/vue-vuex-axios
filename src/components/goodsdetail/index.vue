@@ -1,23 +1,22 @@
 <template>
     <div>
         <div>
-            <detailtitle v-bind:category=" detail_title_data"></detailtitle>
+            <detailtitle ></detailtitle>
         </div>
         <div class="top">
             <div class="left">
-                <goodsshow v-bind:show_data="goods_show_data"></goodsshow>
+                <goodsshow ></goodsshow>
             </div>
             <div class="right">
-                <goodsdata v-bind:data="goods_data"></goodsdata>
-                <goodsmodel v-bind:model="goods_model"></goodsmodel>
-                
-                <goodsselected v-bind:selectedList="goods_selected"></goodsselected>
-                <goodssubtotal v-bind:subtotal="goods_subtotal"></goodssubtotal>
+                <goodsdata ></goodsdata>
+                <goodsmodel></goodsmodel>
+                <goodsselected ></goodsselected>
+                <goodssubtotal ></goodssubtotal>
             </div>
         </div>
        <div class="bottom">
-           <goodssecondinfo v-bind:second_info="goods_second_info"></goodssecondinfo>
-           <goodspic v-bind:pic="goods_pic"></goodspic>
+           <goodssecondinfo></goodssecondinfo>
+           <goodspic ></goodspic>
        </div>
     </div>
 </template>
@@ -38,33 +37,11 @@
     import goodssecondinfo from './goodssecondinfo.vue';
     // 页面底部商品大图片展示及空余部分使用公司宣传图片
     import goodspic from './goodspic.vue';
-
-    import axios from  'axios';
     import api from '../../api/api.js';
     import {mapState} from 'vuex';
     const url = api.productDetail;
     export default {
-        // data(){
-        //     return{
-        //            // 标题 一 二 三 级类目 和商品名称
-        //         detail_title_data : [],
-        //         // 商品图片展示及图片下方数据
-        //         goods_show_data : {},
-        //          // 右侧 商品数据
-        //         goods_data: {},
-                
-        //         goods_model :[],
-        //          //已选清单及相关数量 以及价格
-        //         goods_selected : [],
-        //         // 商品价格统计
-        //         goods_subtotal : '',
-        //         // 下半部分商品数据展示
-        //         goods_second_info : {},
-        //         // 页面底部商品大图片展示及空余部分使用公司宣传图片
-        //         goods_pic : [],
-        //     }
-        // },
-        components : [
+        components : {
             detailtitle,
             goodsshow,
             goodsdata,
@@ -73,120 +50,19 @@
             goodssubtotal,
             goodssecondinfo,
             goodspic
-        ],
-        computed : mapState({
-           detail_title_data (state){
-               let title =[];
-               for(let i=0;i<4;i++){
-                    if(state.productspu[`category${i}stName`]){
-                        title.push(state.productspu[`category${i}stName`]);
-                    }
-               }
-               return title;//列表名
-            //    if(state.productspu.category1stName){
-            //         title.push(state.productspu.category1stName);
-            //    }
-             
-           },
-           goods_show_data(state){
-                let showData = {};
-                showData.goodsImage = state.productspu.goodsImage;//大图
-                showData.imgList = state.productspu.imgList;//小图
-                showData.code = state.productspu.code;//商品编号
-                showData.lcCode = state.productspu.lcCode;// LC编号
-                return showData;
-           },
-           goods_data(state){
-               let goodsData = {};
-               goodsData.name = state.productspu.name;//商品名称
-               goodsData.subtitle = state.productspu.subtitle;// 次标题
-               goodsData.price = state.productspu.salesPrice*1.1;// 市场价
-               //协议价或者折扣价
-               goodsData.salesPrice = state.productspu.agreePrice? state.productspu.agreePrice: state.productspu.salesPrice ;
-               goodsData.brandName =   state.productspu.brandName; //品牌
-                goodsData.register = state.productspu.medicalRegistNum;     //注册证号
-                goodsData.saledNumber = state.productspu.saledNumber;//销售量
-                goodsData.storeName =state.productspu.storeName;//供应商
-                return goodsData;
-           },
-           goods_model(state){
-               let model = [];
-               const length = state.productsku.length;
-               for(let i =0;i<length;i++){
-                    mmodel[i]={
-                       specification : state.productsku[i].specification,// 型号
-                       price : state.productsku[i].salesPrice&&state.productsku[i].agreePrice, // 价格
-                       is_agreePrice : state.productsku[i].agreePrice === '', // 是否为协议价
-                       productId : state.productsku[i].productId,// 商品id
-                       sku : state.productsku[i].sku // 规格sku 编码 
-
-
-
-                    }
-               }
-               return model;//商品类型
-           },
-           goods_selected(state){
-               return  state.selectedmodel;// 已选择的商品类型
-           },
-           goods_subtotal(state){
-                return state.goods_subtotal;//总价
-           },
-           goods_second_info(state){
-                let goodsSecondInfo = {};
-                goodsSecondInfo.unit = state.productspu.unit;//单位
-                goodsSecondInfo.attribute = state.productspu.attribute;//材质
-                goodsSecondInfo.boxBin = state.productspu.boxBin;//箱规
-                goodsSecondInfo.origin = state.productsku[0].origin;//产地
-                goodsSecondInfo.length = state.productsku[0].length;//长
-                goodsSecondInfo.width = state.productsku[0].width;//宽
-                goodsSecondInfo.height = state.productsku[0].height;//高
-                goodsSecondInfo.weight = state.productsku[0].weight;//重量
-           },
-           goods_pic(state){
-                return state.productspu.imgList;//小图
-           }
-        }),
+        },
         //“productid”:”12345”, “start”:”0”, “num”:”10”，“tenantId”：“abcd”
         methods : {
             getgoodsdata(){
-                // this.$store.dispatch('goods_detail',{
-                //     productid: "224",
-                //     start: "0",
-                //     num: "10",
-                //     tenantId: "1"
-                // });
-                 axios.post(api.productDetail,{
-                      productid: "224",
+                this.$store.dispatch('goods_detail',{
+                    productid: "224",
                     start: "0",
                     num: "10",
                     tenantId: "1"
-                 })
-                .then(function(response){
-                        if(response){
-                            console.log(response);
-                        }
-                        
-                    }
-                    // (response)=>{
-                    // console.log(response,11);
-                    // if(response.code == 'A0000'){
-                    //     commit(types.GET_GOODS_DATA_SUCCESS,{ response})
-                    // }else{
-                    //     commit(types.GET_GOODS_DATA_FAILED,{response})
-                    // }
-                )
-            .catch(function (error) {
-                //    console.log(error);
                 });
-
-
-
-
-
             }
         },
-        mouted : function(){
+       created : function(){
             // 获取数据
              this.getgoodsdata();
         }
@@ -281,7 +157,8 @@
 //     "weight":0,
 //     "width":0
 //     }],
-//     "productspu":{
+
+//   "productspu":{
 //         "attribute":"乳胶",
 //         "boxBin":"",
 //         "brandId":32,

@@ -11,24 +11,26 @@
 <script>
     import {mapState} from 'vuex';
     export default {
-        name : 'goodssubtotal',
-        computed : mapState({
-            number(state){
-                let num =0;
-              for(let i in state.selected_model){
-                num += state.selected_model[i].num
-              }
-              return num;
-            },
-            totalPrice(state){
-                let num =0;
-                for(let i in state.selected_model){
-                    let singlePrice = state.selected_model[i].num*state.selected_model[i].price;
-                    num +=singlePrice;
-                }
-               
+      
+        computed :{ 
+            ...mapState({
+                number(state){
+                    let num =0;
+                    for(let i in state.selected_model){
+                        num += state.selected_model[i].num
+                    }
+                    return num;
+                },
+                totalPrice(state){
+                    let num =0;
+                    for(let i in state.selected_model){
+                        let singlePrice = state.selected_model[i].num*state.selected_model[i].price;
+                        num +=singlePrice;
+                    }
+                
+                },
             }
-        }),
+        )},
         
         methods : {
             // 加入购物车

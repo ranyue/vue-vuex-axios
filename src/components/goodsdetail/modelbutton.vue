@@ -5,7 +5,7 @@
 </template>
 <script>
     export default {
-        name : 'modelbutton',
+       
         props : {
             data : {
                 type : Object,

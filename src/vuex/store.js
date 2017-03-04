@@ -5,19 +5,21 @@ import products from './modules/products'
 import * as actions from './actions'
 import * as getters from './getters'
 import * as mutations from './mutation'
-import state from './state';
-import goodsDetail  from './modules/goods-detail.js';
+import goodsDetail  from './modules/goodsdetail.js';
+
+import shopcart from './modules/shopcart'
 Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
-  state,
+ 
   actions,
   getters,
   mutations,
   modules: {
     cart,
     products,
-    goodsDetail
+    goodsDetail,
+    shopcart
   },
   strict: debug
 })

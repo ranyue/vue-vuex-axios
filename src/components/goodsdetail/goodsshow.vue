@@ -20,16 +20,24 @@
     </div>
 </template>
 <script>
+    import {mapState} from 'vuex';
     export default {
-        
-        name : 'goodsshow',
-      
-        props : {
-            show_data :{
-                type:Object,
-                default : {},
-                required : true,
+        data(){
+            return {
+                 show_data : {}
             }
         },
+        computed : {
+            ...mapState({
+                show_data(state){
+                        let showData = {};
+                        showData.goodsImage = state.productspu.goodsImage;//大图
+                        showData.imgList = state.productspu.imgList;//小图
+                        showData.code = state.productspu.code;//商品编号
+                        showData.lcCode = state.productspu.lcCode;// LC编号
+                        return showData;
+                },     
+            })
+        }
     }
 </script>

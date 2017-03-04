@@ -31,15 +31,27 @@
     </div>
 </template>
 <script>
+import {mapState} from 'vuex';
     export default {
-        props : {
-            second_info : {
-                type : Object,
-                required :true,
-                default :{
-
-                }
+        data (){
+            return {
+                second_info :{},
             }
-        }
+        },
+         computed : {
+            ...mapState({
+                second_info(state){
+                        let goodsSecondInfo = {};
+                        goodsSecondInfo.unit = state.productspu.unit;//单位
+                        goodsSecondInfo.attribute = state.productspu.attribute;//材质
+                        goodsSecondInfo.boxBin = state.productspu.boxBin;//箱规
+                        goodsSecondInfo.origin = state.productsku[0].origin;//产地
+                        goodsSecondInfo.length = state.productsku[0].length;//长
+                        goodsSecondInfo.width = state.productsku[0].width;//宽
+                        goodsSecondInfo.height = state.productsku[0].height;//高
+                        goodsSecondInfo.weight = state.productsku[0].weight;//重量
+                },
+            })
+        },
     }
 </script>

@@ -1,72 +1,56 @@
 import * as types from '../mutation-types';
 import api from '../../api/api.js';
-import axios from 'axios';
+//import axios from 'axios';
+import {Fetch} from '../../utils/utils.js';
 
 const state = {
-    goods_detail : {},
-    goods_productsku : '',
-    goods_productspu: '',
+    goods_detail : {
+        productsku:null,
+        productspu:null
+    },
     selected_model : [],
     shopingcar : [],
-    goods_subtotal : '',
     goods_model : [],
-    get_goods_data_failed : fales,
+    get_goods_data_success : false,
 };
 
 const actions = {
    //获取商品详情
-    // goods_detail({commit},payload){
-    //     // axios.post('/user', {
-    //     //     firstName: 'Fred',
-    //     //     lastName: 'Flintstone'
-    //     // })
-    //     // .then(function (response) {
-    //     //     console.log(response);
-    //     // })
-    //     // .catch(function (error) {
-    //     //     console.log(error);
-    //     // });
-    //     axios.post(api.productDetail,{...payload})
-    //     .then(function(response){
-    //             if(response){
-    //                 console.log(response);
-    //             }
-                
-    //         }
-            
-            
-    //         // (response)=>{
-    //         // console.log(response,11);
-    //         // if(response.code == 'A0000'){
-    //         //     commit(types.GET_GOODS_DATA_SUCCESS,{ response})
-    //         // }else{
-    //         //     commit(types.GET_GOODS_DATA_FAILED,{response})
-    //         // }
-    //     )
-    //    .catch(function (error) {
-    //     //    console.log(error);
-    //     });
-    // },
-    //  //添加到购物车
-    // //  "buyerId":"1:2:3",
-    // // "goodsId":66,
-    // // "goodsSkuId":65,
-    // // "goodsNum":2
-    // addtoshopingcar ({commit},payload){
-    //     axios(api.addCart,{...payload})
-    //     .then(
-    //         response =>{
-    //             if(response.code == 'A0000'){
-    //                 commit(types.ADD_TO_SHOPING_CAR_SUCCESS)
-    //             }else{
-    //                 commit(types.ADD_TO_SHOPING_CAR_FAILED)
-    //             }
-    //         }
-    //     )
-    //     .catch(e=>{
-    //         console.log(e)
-    //     })
-    // },
+    goods_detail({commit},payload){
+        Fetch(api.productDetail,{...payload})
+       .then((response)=>{
+             console.log(response,11);
+            if(response.code == 'A0000'){
+                 commit(types.GET_GOODS_DATA_SUCCESS,{ response})
+            }else{
+                   commit(types.GET_GOODS_DATA_FAILED,{response})
+               }
+        }
+    )
+     .catch(function (error) {
+           console.log(error);
+        });
+    },
+     //添加到购物车
+    //  "buyerId":"1:2:3",
+    // "goodsId":66,
+    // "goodsSkuId":65,
+    // "goodsNum":2
+    addtoshopingcar ({commit},payload){
+        Fetch(api.addCart,{...payload})
+        .then(
+            response =>{
+                if(response.code == 'A0000'){
+                    commit(types.ADD_TO_SHOPING_CAR_SUCCESS)
+                }else{
+                    commit(types.ADD_TO_SHOPING_CAR_FAILED)
+                }
+            }
+        )
+        .catch(e=>{
+            console.log(e)
+        })
+    },
 
 };
 
@@ -84,7 +68,10 @@ const mutations = {
     
     // 添加商品规格
     [types.ADD_GOODS_MODEL](state,{data}){
-        state.shopingcar.push(data)
+        if(data){
+             state.shopingcar.push(data)
+        }
+       
     },
     // 选择或取消对应的商品规格
     // [types.CLICK_MODEL_BUTTON](state,{data}){
@@ -98,8 +85,10 @@ const mutations = {
     // },
     //获取商品信息成功
     [types.GET_GOODS_DATA_SUCCESS](state,{response}){
-        state.goods_detail.productsku = data.productsku;
-        state.goods_detail.productspu = data.productsku;
+        state.goods_detail.productsku = response.productsku;
+        state.goods_detail.productspu = response.productspu;
+        get_goods_data_success : true;
+
     },
     // 获取商品信息失败
     [types.GET_GOODS_DATA_FAILED](state,{data}){
@@ -136,5 +125,3 @@ export default {
     actions,
     mutations
 }
-
-

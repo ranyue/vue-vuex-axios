@@ -19,13 +19,12 @@
 </template>
 <script>
 // 数据为请求过来的型号
+import {mapState} from 'vuex';
 import modelButton from './modelbutton.vue';
   export default {
-    props:{
-      model :{
-        type : Array,
-        required : true,
-        default : [],
+    data (){
+      return {
+        model : []
       }
     },
     methods: {
@@ -44,9 +43,27 @@ import modelButton from './modelbutton.vue';
         }
       }
     },
-    components : [
+    computed : {
+      ...mapState({
+        model(state){
+            let model = [];
+            const length = state.productsku.length;
+            for(let i =0;i<length;i++){
+                    mmodel[i]={
+                    specification : state.productsku[i].specification,// 型号
+                    price : state.productsku[i].salesPrice&&state.productsku[i].agreePrice, // 价格
+                    is_agreePrice : state.productsku[i].agreePrice === '', // 是否为协议价
+                    productId : state.productsku[i].productId,// 商品id
+                    sku : state.productsku[i].sku // 规格sku 编码 
+                    }
+            }
+            return model;//商品类型
+        },
+      })
+    },
+    components : {
       modelButton
-    ],
+    },
     mounted : function(){
       this.$store.commit('INITIAL_MODEL',{
         model :this.model
